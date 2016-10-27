@@ -1,0 +1,8 @@
+html {
+  font-family: 'Open Sans', 'Trebuchet MS', sans-serif;
+}
+html body {
+  vertical-align: middle;
+  display: table-cell;
+  background: white;
+}
