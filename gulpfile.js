@@ -19,28 +19,16 @@ var appConfig = {
 };
 
 
-// css generation from less
-gulp.task('less', function () {
-    return gulp.src(appConfig.app + '/css/**/*.less')
-      .pipe($.less())
-      .on('error', function (message) {
-          console.log(message);
-          this.emit('end');
-      })
-      .pipe(gulp.dest(appConfig.app + '/css'))
-      .pipe(reload({ stream: true }));
-});
-
-
-// react
-gulp.task('react', function () {
-    return gulp.src(appConfig.app + '/js/**/*.jsx')
-    .pipe($.react())
-    .on('error', function (message) {
-        console.log(message);
-        this.emit('end');
-    })
-    .pipe(gulp.dest(appConfig.app + '/js'));
+// css generation from scss
+gulp.task('scss', function () {
+  return gulp.src(appConfig.app + '/css/*.scss')
+          .pipe($.sass.sync({
+            outputStyle: 'expanded',
+            includePaths: ['.'],
+            precision: 10
+          }).on('error', $.sass.logError))
+          .pipe(gulp.dest(appConfig.app + '/css'))
+          .pipe(reload({stream: true}));
 });
 
 
@@ -85,11 +73,11 @@ var htmlEntities = function (input, output) {
           .pipe(gulp.dest(output));
 };
 
-gulp.task('html', function () {
+gulp.task('html', ['scss'], function () {
   return htmlEntities(appConfig.app + '/*.html', appConfig.dist);
 });
 
-gulp.task('views', function () {
+gulp.task('views', ['scss'], function () {
   return htmlEntities(appConfig.app + '/html/*.html', appConfig.dist + '/app/html');
 });
 
@@ -135,7 +123,7 @@ gulp.task('clean', function () {
 
 // build app
 gulp.task('build', function () {
-  runs('clean', 'less', 'react', 'html', 'views', 'documents', 'favicon', 'fonts', 'dist');
+  runs('clean', 'html', 'views', 'documents', 'favicon', 'fonts', 'dist');
 });
 
 
@@ -148,7 +136,7 @@ gulp.task('test', function (done) {
 
 
 // start app
-gulp.task('serve', ['less', 'react'], function () {
+gulp.task('serve', ['scss'], function () {
   bsync({
     notify: false,
     port: 1337,
@@ -169,8 +157,7 @@ gulp.task('serve', ['less', 'react'], function () {
     appConfig.app + '/css/**/*.css'
   ]).on('change', reload);
 
-  gulp.watch(appConfig.app + '/css/**/*.less', ['less']);
-  gulp.watch(appConfig.app + '/js/**/*.jsx', ['react']);
+  gulp.watch(appConfig.app + '/css/**/*.scss', ['scss']);
 });
 
 

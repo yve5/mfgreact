@@ -1,0 +1,15 @@
+<audio-player pause="isPaused"></audio-player>
+
+<div class="header hidden-print">
+    <div ng-show="service.getSection() !== 'home'">
+        <a href="#/"><span class="micons">home</span></a>
+    </div>
+    <div ng-show="service.getSection() !== 'help'">
+        <a href="#/help">?</a>
+    </div>
+    <div ng-click="pause()">
+        <span class="micons" ng-hide="isPaused">volume_up</span>
+        <span class="micons" ng-show="isPaused">volume_off</span>
+    </div>
+    <div>{{ service.getClicks() }}</div>
+</div>
