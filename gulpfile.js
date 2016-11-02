@@ -19,16 +19,28 @@ var appConfig = {
 };
 
 
-// css generation from scss
-gulp.task('scss', function () {
-  return gulp.src(appConfig.app + '/css/*.scss')
-          .pipe($.sass.sync({
-            outputStyle: 'expanded',
-            includePaths: ['.'],
-            precision: 10
-          }).on('error', $.sass.logError))
-          .pipe(gulp.dest(appConfig.app + '/css'))
-          .pipe(reload({stream: true}));
+// css generation from less
+gulp.task('less', function () {
+    return gulp.src(appConfig.app + '/css/**/*.less')
+      .pipe($.less())
+      .on('error', function (message) {
+          console.log(message);
+          this.emit('end');
+      })
+      .pipe(gulp.dest(appConfig.app + '/css'))
+      .pipe(reload({ stream: true }));
+});
+
+
+// react
+gulp.task('react', function () {
+    return gulp.src(appConfig.app + '/js/**/*.jsx')
+    .pipe($.react())
+    .on('error', function (message) {
+        console.log(message);
+        this.emit('end');
+    })
+    .pipe(gulp.dest(appConfig.app + '/js'));
 });
 
 
@@ -73,11 +85,11 @@ var htmlEntities = function (input, output) {
           .pipe(gulp.dest(output));
 };
 
-gulp.task('html', ['scss'], function () {
+gulp.task('html', function () {
   return htmlEntities(appConfig.app + '/*.html', appConfig.dist);
 });
 
-gulp.task('views', ['scss'], function () {
+gulp.task('views', function () {
   return htmlEntities(appConfig.app + '/html/*.html', appConfig.dist + '/app/html');
 });
 
@@ -123,7 +135,7 @@ gulp.task('clean', function () {
 
 // build app
 gulp.task('build', function () {
-  runs('clean', 'html', 'views', 'documents', 'favicon', 'fonts', 'dist');
+  runs('clean', 'less', 'react', 'html', 'views', 'documents', 'favicon', 'fonts', 'dist');
 });
 
 
@@ -136,7 +148,7 @@ gulp.task('test', function (done) {
 
 
 // start app
-gulp.task('serve', ['scss'], function () {
+gulp.task('serve', ['less', 'react'], function () {
   bsync({
     notify: false,
     port: 1337,
@@ -157,7 +169,8 @@ gulp.task('serve', ['scss'], function () {
     appConfig.app + '/css/**/*.css'
   ]).on('change', reload);
 
-  gulp.watch(appConfig.app + '/css/**/*.scss', ['scss']);
+  gulp.watch(appConfig.app + '/css/**/*.less', ['less']);
+  gulp.watch(appConfig.app + '/js/**/*.jsx', ['react']);
 });
 
 

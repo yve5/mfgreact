@@ -1,4 +1,4 @@
-# Pairs Game
+# MF Gulp React Boilerplate
 
 
 ## Installation
@@ -21,7 +21,7 @@ With Windows, the removal of **node_modules** folder should be difficult.
 
 Available solutions:
 - Delete the folder with a software as Filezilla.
-- Type the foolowinf command line: *rimraf node_modules*
+- Type the following command line: *rimraf node_modules*
 
 > **rimraf** must be used WITH CAUTION. This command line can remove any file.
 
@@ -48,10 +48,6 @@ Type the command line **gulp** in terminal.
 | ------------------------- | ---------------------------------- |
 | **http://localhost:1337** | Application interface              |
 | **http://localhost:3001** | Configuration interface            |
-
-## Soundtrack
-
-[kojodi · Alone In Paris - Extended Version](https://soundcloud.com/kojodi/alone-in-paris-extended-version?in=kojodi/sets/soundtrack-works)
 
 ## License
 
